@@ -11,7 +11,7 @@ New Delhi, India | [Email](mailto:hiral.kumar2006@gmail.com) | [LinkedIn](https:
 - **Tech Stack**:Python · Scikit-learn · Logistic Regression · Streamlit · Jupyter  
 
 **Perplexity AI** | *Campus Partner* | **Remote, India** | *Sept 2025 - Dec 2025*
-- **Achievements**: Engineered a [Solution] for [Problem] using [Software].
+- **Achievements**: •	Drove user acquisition across Delhi NCR via referral campaigns; managed full pipeline on Dub Analytics from onboarding to conversion, earning monetary incentives and platform benefits.
 
 ---
 
