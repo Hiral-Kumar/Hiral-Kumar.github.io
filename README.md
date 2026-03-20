@@ -1,27 +1,41 @@
 # Hiral-Kumar.github.io
-<html>
-<head>
-<title>
-Entering the cosmos
-</title>
-</head>
-<body background="C:\Users\Dell\Desktop\HIRAL\BH_accretion_disk_viz_desktop.png">
-<center> <font face="courier" color="white"> <h1>ABOUT ME</h1> 
-<p>I'm Hiral Kumar, a 20 year old B.Tech CSE student hailing from New Delhi</p>
-<p>The vast cosmos of science and technology has always inspired me to dive deep into it... From knowing only the tip of the iceberg of knowledge known to the mankind I'm starting my journey to learn more about this infinite cosmos of technology to satisfy the never ending inner curosity and thereby making this world a better place to live in...</P>
-</center>
-<table border=3 bordercolor="black" bgcolor="white">
-<tr>
-<th>Name</th><td>Hiral Kumar</td>
-<th>e-mail ID</th><td>hiral.kumar2006@gmail.com</td>
-<th>Qualification Details</th><td>90.2% in 10th CBSE & 88.6% in 12th CBSE</td>
-<th>Jr. School</th><td>VNS Saket, New Delhi</td>
-<th>Sr. School</th><td>BDPS</td>
-<th>btech</th><td>GBU, Greater Noida</td>
-<th>Hobbies</th><td>Physics, Space Tech, Coding, Drawing, Football</td>
-<th>Github</th><td>https://github.com/Hiral-Kumar</td>
-</table>
-<p>TO BE CONTINUED...</p></font>
-</body>
-</html>
+# HIRAL KUMAR
+New Delhi, India | [Email](mailto:hiral.kumar2006@gmail.com) | [LinkedIn](https://www.linkedin.com/in/hiral-kumar) | [Portfolio](https://www.hiral.loavable.app) | [Phone]+91 8527023035
 
+---
+
+## EXPERIENCE
+
+**AWS Cloud Club** | *Core Team Memeber as Learner* | **Greater Noida, India** | *Jan 2026 – Present*
+- **Specific Achievement**: Completed AWS-curated ML modules (fundamentals, model training, cloud workflows); co-presented at AI/ML seminars
+- **Tech Stack**:Python · Scikit-learn · Logistic Regression · Streamlit · Jupyter  
+
+**Perplexity AI** | *Campus Partner* | **Remote, India** | *Sept 2025 - Dec 2025*
+- **Achievements**: Engineered a [Solution] for [Problem] using [Software].
+
+---
+
+## EDUCATION
+
+**Gautam Buddha University** | *B.Tech - CSE* | **City, Country** | *2025 — 2029*
+- **Thesis**: *Not proposed yet* - Brief description of technical stack tbc.
+- **Relevant Coursework**: C & Java, Discrete Mathematics, Digital Logic Design.
+
+---
+
+## PROJECTS
+
+- **Pass/Fail Predictor** | [https://github.com/Hiral-Kumar/pass_fail_predictor]
+	Trained a Logistic Regression model on 10,000 student records to predict pass/fail outcomes with risk percentage and natural-language reasoning per prediction.
+  Deployed as an interactive Streamlit web app for real-time predictions; full ML pipeline from preprocessing to deployment. Built under AWS Cloud Club AI/ML mentorship
+
+- **Engineering Society/Leadership**
+  Led a team of [ICT workshop] to design [RFID Door Lock System] for [Project Demonstartion Competition].
+
+---
+
+## TECHNICAL SKILLS
+
+- **Languages**: Python, C/C++, Java, HTML/CSS, SQL (MySQL)
+- **Software/Tools**: Git & GitHub, Flask, Arduino IDE, TinkerCAD, Figma, Notion, Dub Analytics, AWS (learning)
+- **Frameworks/Libraries**: Scikit-learn, Logistic Regression, Pandas, NumPy, Jupyter Notebook, Streamlit
