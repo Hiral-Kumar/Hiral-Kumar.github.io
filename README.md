@@ -1,6 +1,6 @@
 # Hiral-Kumar.github.io
 # HIRAL KUMAR
-New Delhi, India | [Email](mailto:hiral.kumar2006@gmail.com) | [LinkedIn](https://www.linkedin.com/in/hiral-kumar) | [Portfolio](https://www.hiral.loavable.app) | [Phone]+91 8527023035
+New Delhi, India | [Email](mailto:hiral.kumar2006@gmail.com) | [LinkedIn](https://www.linkedin.com/in/hiral-kumar) | [Portfolio](https://www.hiral.loavable.app) | [+91 8527023035]
 
 ---
 
