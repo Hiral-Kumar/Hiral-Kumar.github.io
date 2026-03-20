@@ -17,7 +17,7 @@ New Delhi, India | [Email](mailto:hiral.kumar2006@gmail.com) | [LinkedIn](https:
 
 ## EDUCATION
 
-**Gautam Buddha University** | *B.Tech - CSE* | **City, Country** | *2025 — 2029*
+**Gautam Buddha University** | *B.Tech - CSE* | **Greater Noida, India** | *2025 — 2029*
 - **Thesis**: *Not proposed yet* - Brief description of technical stack tbc.
 - **Relevant Coursework**: C & Java, Discrete Mathematics, Digital Logic Design.
 
