@@ -3,717 +3,647 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hiral Kumar — Portfolio</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <title>Hiral Kumar</title>
+  <meta name="description" content="Hiral Kumar — B.Tech CSE at GBU, AWS Cloud Club AI/ML Core Member. Building at the edge of machine learning and real-world systems. NAEST State Rank 5, IIT Kanpur.">
+  <meta property="og:title" content="Hiral Kumar">
+  <meta property="og:description" content="B.Tech CSE · AWS Cloud Club AI/ML Core · Campus Partner @ Perplexity AI">
+  <meta property="og:image" content="https://avatars.githubusercontent.com/u/126245816?v=4">
+  <meta property="og:url" content="https://hiral-kumar.github.io">
+  <meta name="twitter:card" content="summary_large_image">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,300;0,400;0,600;0,700;0,900;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── Variables ─────────────────────────────────────────── */
     :root {
-      --bg: #06060d;
-      --surface: rgba(255,255,255,0.025);
-      --surface-hover: rgba(255,255,255,0.045);
-      --text: #e8e0cc;
-      --text-dim: #7a7a8e;
-      --text-dimmer: #3a3a4e;
-      --gold: #d4a853;
-      --gold-bright: #e8c070;
-      --gold-dim: rgba(212,168,83,0.10);
-      --gold-glow: rgba(212,168,83,0.05);
-      --border: rgba(255,255,255,0.06);
-      --border-gold: rgba(212,168,83,0.22);
-      --serif: 'Cormorant Garamond', Georgia, serif;
-      --mono: 'Space Mono', 'Courier New', monospace;
+      --bg:            #07070f;
+      --surface:       #0c0d18;
+      --surface-hi:    #11121f;
+      --border:        #1c1e30;
+      --border-hi:     #2c2f48;
+      --text:          #c0c4e0;
+      --text-bright:   #e6e9f8;
+      --text-muted:    #484c6e;
+      --accent:        #e8b96a;
+      --accent-dim:    rgba(232,185,106,0.08);
+      --accent-ring:   rgba(232,185,106,0.22);
+      --font-sans:     'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-display:  'Epilogue', system-ui, sans-serif;
+      --font-mono:     'JetBrains Mono', ui-monospace, monospace;
+      --col:           680px;
+      --pad-x:         28px;
+      --radius:        6px;
     }
 
-    html { scroll-behavior: smooth; }
+    /* ─── Reset ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
 
+    /* ─── Body ───────────────────────────────────────────────── */
     body {
+      font-family: var(--font-sans);
       background: var(--bg);
       color: var(--text);
-      font-family: var(--serif);
-      font-size: 18px;
       line-height: 1.7;
+      min-height: 100vh;
       overflow-x: hidden;
-      cursor: none;
     }
 
-    /* ─── Cursor ─── */
-    #cur {
-      position: fixed; width: 7px; height: 7px;
-      background: var(--gold); border-radius: 50%;
-      pointer-events: none; z-index: 9999;
-      transform: translate(-50%,-50%);
-      transition: transform .12s ease, background .2s;
-    }
-    #cur-ring {
-      position: fixed; width: 30px; height: 30px;
-      border: 1px solid var(--gold); border-radius: 50%;
-      pointer-events: none; z-index: 9998;
-      transform: translate(-50%,-50%);
-      opacity: .35; transition: transform .12s ease, opacity .2s;
-    }
-    body.hovered #cur { transform: translate(-50%,-50%) scale(2.2); }
-    body.hovered #cur-ring { opacity: .6; transform: translate(-50%,-50%) scale(1.4); }
-
-    /* ─── Canvas ─── */
-    #stars {
-      position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0; pointer-events: none;
+    /* ─── Canvas starfield ───────────────────────────────────── */
+    #cosmos {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
     }
 
-    /* ─── Glow blobs ─── */
-    .blob {
-      position: fixed; border-radius: 50%;
-      pointer-events: none; z-index: 0; filter: blur(90px);
-    }
-    .blob-a {
-      width: 500px; height: 400px;
-      background: radial-gradient(ellipse, rgba(212,168,83,.045) 0%, transparent 70%);
-      top: 5%; left: -10%;
-    }
-    .blob-b {
-      width: 400px; height: 350px;
-      background: radial-gradient(ellipse, rgba(80,120,200,.04) 0%, transparent 70%);
-      bottom: 20%; right: -5%;
+    /* ─── Wrapper ────────────────────────────────────────────── */
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: var(--col);
+      margin: 0 auto;
+      padding: 0 var(--pad-x);
     }
 
-    /* ─── Nav ─── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      z-index: 100; padding: 26px 64px;
-      display: flex; justify-content: space-between; align-items: center;
-      transition: all .4s ease;
+    /* ─── Skip link ──────────────────────────────────────────── */
+    .skip {
+      position: absolute;
+      top: -100%;
+      left: var(--pad-x);
+      background: var(--accent);
+      color: #000;
+      font-weight: 700;
+      padding: 8px 18px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      z-index: 200;
+      transition: top .2s;
     }
-    nav.scrolled {
-      background: rgba(6,6,13,.88);
-      backdrop-filter: blur(14px) saturate(120%);
-      padding: 16px 64px;
-      border-bottom: 1px solid var(--border);
+    .skip:focus { top: 16px; }
+
+    /* ─── Links ──────────────────────────────────────────────── */
+    a { color: var(--accent); text-decoration: none; transition: color .18s, opacity .18s; }
+    a:hover { color: #f5d492; text-decoration: underline; }
+
+    /* ─── Divider ────────────────────────────────────────────── */
+    .rule {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 44px 0;
     }
-    .nav-logo {
-      font-family: var(--mono); font-size: .78rem;
-      color: var(--gold); letter-spacing: .14em;
+
+    /* ─── Header ─────────────────────────────────────────────── */
+    header { padding: 72px 0 0; }
+
+    .avatar {
+      display: block;
+      width: 76px; height: 76px;
+      border-radius: 50%;
+      border: 2px solid var(--border-hi);
+      margin-bottom: 28px;
+      transition: border-color .3s, transform .3s;
+    }
+    .avatar:hover { border-color: var(--accent); transform: scale(1.04); }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(1.9rem, 5vw, 2.5rem);
+      font-weight: 900;
+      color: var(--text-bright);
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      margin-bottom: 6px;
+    }
+    .handle {
+      font-family: var(--font-mono);
+      font-size: .8rem;
+      color: var(--accent);
+      letter-spacing: .04em;
+      display: block;
+      margin-bottom: 18px;
+    }
+    .bio {
+      font-size: .97rem;
+      color: var(--text);
+      max-width: 540px;
+      margin-bottom: 28px;
+      line-height: 1.65;
+    }
+    .bio strong { color: var(--text-bright); font-weight: 600; }
+
+    /* ─── Social pills ───────────────────────────────────────── */
+    .socials {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      list-style: none;
+    }
+    .socials a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: .75rem;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 5px 13px;
+      border-radius: 999px;
+      transition: color .18s, border-color .18s, background .18s;
       text-decoration: none;
     }
-    .nav-links { display: flex; gap: 40px; list-style: none; }
-    .nav-links a {
-      font-family: var(--mono); font-size: .68rem;
-      color: var(--text-dim); text-decoration: none;
-      letter-spacing: .14em; text-transform: uppercase;
-      transition: color .25s;
+    .socials a:hover {
+      color: var(--text-bright);
+      border-color: var(--border-hi);
+      background: var(--surface-hi);
+      text-decoration: none;
     }
-    .nav-links a:hover { color: var(--gold); }
+    .socials a svg { width: 12px; height: 12px; flex-shrink: 0; }
 
-    /* ─── Section base ─── */
-    section { position: relative; z-index: 1; }
-
-    .sec-label {
-      font-family: var(--mono); font-size: .65rem;
-      color: var(--gold); letter-spacing: .22em;
-      text-transform: uppercase; margin-bottom: 14px;
-      display: flex; align-items: center; gap: 12px;
-    }
-    .sec-label::after {
-      content: ''; display: block; height: 1px;
-      width: 36px; background: var(--gold); opacity: .35;
-    }
-
-    /* ─── Hero ─── */
-    #hero {
-      height: 100vh; display: flex; flex-direction: column;
-      justify-content: center; padding: 0 64px;
-      max-width: 1160px; margin: 0 auto; position: relative;
-    }
-    .hero-eyebrow {
-      font-family: var(--mono); font-size: .68rem;
-      color: var(--text-dim); letter-spacing: .18em;
-      text-transform: uppercase; margin-bottom: 22px;
-      opacity: 0; animation: up .8s ease .3s forwards;
-    }
-    .hero-eyebrow::before {
-      content: ''; display: inline-block; width: 20px;
-      height: 1px; background: var(--text-dimmer);
-      vertical-align: middle; margin-right: 10px;
-    }
-    .hero-name {
-      font-size: clamp(3.8rem, 8.5vw, 7.5rem);
-      font-weight: 300; line-height: .98; letter-spacing: -.02em;
-      margin-bottom: 10px;
-      opacity: 0; animation: up .9s ease .5s forwards;
-    }
-    .hero-name em { color: var(--gold); font-style: italic; }
-    .hero-sub {
-      font-family: var(--mono); font-size: .8rem;
-      color: var(--text-dim); letter-spacing: .07em;
-      margin-bottom: 30px;
-      opacity: 0; animation: up .8s ease .72s forwards;
-    }
-    .hero-bio {
-      font-size: 1.08rem; color: var(--text-dim);
-      max-width: 500px; line-height: 1.85;
-      font-weight: 300; margin-bottom: 48px;
-      opacity: 0; animation: up .8s ease .92s forwards;
-    }
-    .hero-cta {
-      display: flex; gap: 14px; flex-wrap: wrap;
-      opacity: 0; animation: up .8s ease 1.1s forwards;
-    }
-    .btn {
-      font-family: var(--mono); font-size: .68rem;
-      letter-spacing: .13em; text-transform: uppercase;
-      padding: 13px 30px; text-decoration: none;
-      transition: all .28s ease; display: inline-block;
-    }
-    .btn-gold { background: var(--gold); color: var(--bg); }
-    .btn-gold:hover { background: var(--gold-bright); transform: translateY(-2px); }
-    .btn-ghost {
-      border: 1px solid var(--border-gold); color: var(--gold);
-    }
-    .btn-ghost:hover { background: var(--gold-dim); transform: translateY(-2px); }
-
-    .scroll-cue {
-      position: absolute; bottom: 42px; left: 64px;
-      font-family: var(--mono); font-size: .62rem;
-      color: var(--text-dimmer); letter-spacing: .14em;
-      text-transform: uppercase; writing-mode: vertical-rl;
-      display: flex; align-items: center; gap: 14px;
-      opacity: 0; animation: fadeIn .8s ease 1.5s forwards;
-    }
-    .scroll-cue::before {
-      content: ''; display: block; width: 1px; height: 48px;
-      background: linear-gradient(to bottom, transparent, var(--text-dimmer));
-    }
-
-    /* ─── About ─── */
-    #about {
-      padding: 130px 64px; max-width: 1160px; margin: 0 auto;
-      display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
-      align-items: start;
-    }
-    .about-h {
-      font-size: clamp(2rem, 3.8vw, 3.2rem); font-weight: 300;
-      font-style: italic; line-height: 1.18; margin-bottom: 24px;
-    }
-    .about-p {
-      color: var(--text-dim); font-size: .97rem; line-height: 1.92;
-      font-weight: 300;
-    }
-    .data-rows { margin-top: 48px; }
-    .drow {
-      display: grid; grid-template-columns: 130px 1fr;
-      padding: 15px 0; border-bottom: 1px solid var(--border); gap: 20px;
-    }
-    .drow:first-child { border-top: 1px solid var(--border); }
-    .dlabel {
-      font-family: var(--mono); font-size: .6rem;
-      color: var(--text-dimmer); letter-spacing: .13em;
-      text-transform: uppercase; padding-top: 3px;
-    }
-    .dval { font-size: .92rem; color: var(--text); }
-    .dval a { color: var(--gold); text-decoration: none; }
-    .dval a:hover { text-decoration: underline; }
-
-    /* ─── Experience ─── */
-    #experience {
-      padding: 130px 64px; max-width: 1160px; margin: 0 auto;
-    }
-    .sec-h {
-      font-size: clamp(2rem, 3.8vw, 3.2rem); font-weight: 300;
-      font-style: italic; margin-bottom: 60px;
-    }
-    .exp-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 1px; background: var(--border);
-    }
-    .exp-card {
-      background: var(--bg); padding: 52px;
-      transition: background .3s;
-    }
-    .exp-card:hover { background: var(--surface-hover); }
-    .exp-org {
-      font-family: var(--mono); font-size: .6rem;
-      color: var(--gold); letter-spacing: .16em;
-      text-transform: uppercase; margin-bottom: 18px;
-      display: flex; align-items: center; gap: 8px;
-    }
-    .exp-org::before {
-      content: ''; display: block;
-      width: 5px; height: 5px; border-radius: 50%;
-      background: var(--gold); flex-shrink: 0;
-    }
-    .exp-role {
-      font-size: 1.35rem; font-weight: 400;
-      margin-bottom: 8px; color: var(--text);
-    }
-    .exp-period {
-      font-family: var(--mono); font-size: .64rem;
-      color: var(--text-dimmer); letter-spacing: .1em;
+    /* ─── Section label ──────────────────────────────────────── */
+    .label {
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 14px;
       margin-bottom: 20px;
     }
-    .exp-desc { font-size: .88rem; color: var(--text-dim); line-height: 1.85; }
-
-    /* ─── Projects ─── */
-    #projects {
-      padding: 130px 64px; max-width: 1160px; margin: 0 auto;
-    }
-    .proj-list {
-      display: flex; flex-direction: column;
-      gap: 1px; background: var(--border);
-    }
-    .proj-item {
-      background: var(--bg); padding: 44px 52px;
-      display: grid; grid-template-columns: 1fr 28px;
-      gap: 32px; align-items: start;
-      text-decoration: none; color: inherit;
-      transition: background .3s;
-    }
-    .proj-item:hover { background: var(--surface-hover); }
-    .proj-num {
-      font-family: var(--mono); font-size: .6rem;
-      color: var(--text-dimmer); letter-spacing: .1em; margin-bottom: 12px;
-    }
-    .proj-name {
-      font-size: 1.4rem; font-weight: 400;
-      color: var(--text); margin-bottom: 8px;
-    }
-    .proj-wip {
-      font-family: var(--mono); font-size: .58rem;
-      color: var(--text-dimmer); vertical-align: middle;
-      margin-left: 10px; letter-spacing: .06em;
-    }
-    .proj-desc {
-      font-size: .87rem; color: var(--text-dim);
-      line-height: 1.85; font-weight: 300; max-width: 540px;
-    }
-    .proj-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 16px; }
-    .ptag {
-      font-family: var(--mono); font-size: .58rem;
-      color: var(--text-dimmer); border: 1px solid var(--border);
-      padding: 4px 10px; letter-spacing: .07em;
-      transition: border-color .25s, color .25s;
-    }
-    .proj-item:hover .ptag {
-      border-color: var(--border-gold); color: var(--gold);
-    }
-    .proj-arrow {
-      font-size: 1.1rem; color: var(--gold); margin-top: 6px;
-      transition: transform .25s;
-    }
-    .proj-item:hover .proj-arrow { transform: translate(4px,-4px); }
-
-    /* ─── Education ─── */
-    #education {
-      padding: 130px 64px; max-width: 1160px; margin: 0 auto;
-    }
-    .edu-line {
-      border-left: 1px solid var(--border);
-      padding-left: 44px; margin-left: 22px;
-    }
-    .edu-item { position: relative; padding-bottom: 52px; }
-    .edu-item:last-child { padding-bottom: 0; }
-    .edu-item::before {
-      content: ''; position: absolute; left: -48px; top: 7px;
-      width: 8px; height: 8px; border-radius: 50%;
-      background: var(--gold); box-shadow: 0 0 14px rgba(212,168,83,.5);
-    }
-    .edu-year {
-      font-family: var(--mono); font-size: .62rem;
-      color: var(--gold); letter-spacing: .12em; margin-bottom: 8px;
-    }
-    .edu-inst { font-size: 1.28rem; font-weight: 400; color: var(--text); margin-bottom: 4px; }
-    .edu-detail { font-size: .86rem; color: var(--text-dim); font-weight: 300; }
-
-    /* ─── Interests ─── */
-    #interests {
-      padding: 80px 64px 130px; max-width: 1160px; margin: 0 auto;
-    }
-    .interest-h {
-      font-size: clamp(2rem, 3.8vw, 3.2rem); font-weight: 300;
-      font-style: italic; margin-bottom: 40px;
-    }
-    .tag-cloud { display: flex; flex-wrap: wrap; gap: 10px; }
-    .itag {
-      font-family: var(--mono); font-size: .68rem;
-      color: var(--text-dim); border: 1px solid var(--border);
-      padding: 9px 18px; letter-spacing: .08em;
-      text-transform: lowercase;
-      transition: all .25s; cursor: default;
-    }
-    .itag:hover, .itag.lit {
-      border-color: var(--border-gold); color: var(--gold);
-      background: var(--gold-glow);
+    .label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
     }
 
-    /* ─── Footer ─── */
+    /* ─── Entry list (exp / projects / certs) ────────────────── */
+    .entries { list-style: none; }
+
+    .entry {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      grid-template-rows: auto auto;
+      column-gap: 20px;
+      row-gap: 5px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .entries .entry:first-child { border-top: 1px solid var(--border); }
+
+    .entry-title {
+      font-family: var(--font-display);
+      font-size: .97rem;
+      font-weight: 700;
+      color: var(--text-bright);
+      line-height: 1.3;
+      grid-column: 1;
+      grid-row: 1;
+    }
+    .entry-title a { color: inherit; }
+    .entry-title a:hover { color: var(--accent); text-decoration: none; }
+
+    .entry-when {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      color: var(--text-muted);
+      grid-column: 2;
+      grid-row: 1;
+      white-space: nowrap;
+      padding-top: 3px;
+    }
+
+    .entry-body {
+      font-size: .86rem;
+      color: var(--text-muted);
+      grid-column: 1 / -1;
+      grid-row: 2;
+      line-height: 1.6;
+    }
+    .entry-body strong { color: var(--text); font-weight: 500; }
+
+    /* ─── Tag chips ──────────────────────────────────────────── */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 10px;
+    }
+    .chip {
+      font-family: var(--font-mono);
+      font-size: .67rem;
+      color: var(--text-muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 2px 9px;
+      border-radius: var(--radius);
+      transition: color .15s, border-color .15s, background .15s;
+    }
+    .chip:hover {
+      color: var(--accent);
+      border-color: var(--accent-ring);
+      background: var(--accent-dim);
+    }
+
+    /* ─── Badge ──────────────────────────────────────────────── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--font-mono);
+      font-size: .7rem;
+      background: var(--accent-dim);
+      color: var(--accent);
+      border: 1px solid var(--accent-ring);
+      padding: 3px 10px;
+      border-radius: var(--radius);
+    }
+
+    /* ─── Skills grid ────────────────────────────────────────── */
+    .skill-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+      gap: 20px;
+    }
+    .skill-cat h4 {
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .skill-cat p {
+      font-size: .82rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+    }
+
+    /* ─── Education ──────────────────────────────────────────── */
+    .edu-item {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .edu-wrap .edu-item:first-child { border-top: 1px solid var(--border); }
+    .edu-item:last-child { border-bottom: none; }
+    .edu-deg {
+      font-family: var(--font-display);
+      font-size: .97rem;
+      font-weight: 700;
+      color: var(--text-bright);
+    }
+    .edu-school {
+      font-size: .85rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+    .edu-meta {
+      font-family: var(--font-mono);
+      font-size: .73rem;
+      color: var(--accent);
+      margin-top: 5px;
+    }
+    .edu-courses {
+      font-size: .82rem;
+      color: var(--text-muted);
+      margin-top: 7px;
+    }
+
+    /* ─── Main ───────────────────────────────────────────────── */
+    main { padding: 0 0 8px; }
+    section { margin-bottom: 4px; }
+
+    /* ─── Footer ─────────────────────────────────────────────── */
     footer {
-      padding: 80px 64px;
-      border-top: 1px solid var(--border);
-      display: flex; justify-content: space-between; align-items: center;
-      position: relative; z-index: 1;
+      padding: 36px 0 72px;
     }
-    .footer-sign {
-      font-family: var(--serif); font-size: 1.9rem;
-      font-weight: 300; font-style: italic; color: var(--text-dim);
-    }
-    .footer-sign span { color: var(--gold); }
-    .footer-email {
-      font-family: var(--mono); font-size: .62rem;
-      color: var(--text-dimmer); letter-spacing: .1em; margin-top: 8px;
-    }
-    .footer-r { display: flex; gap: 28px; }
-    .footer-r a {
-      font-family: var(--mono); font-size: .65rem;
-      color: var(--text-dimmer); text-decoration: none;
-      letter-spacing: .1em; text-transform: uppercase;
-      transition: color .25s;
-    }
-    .footer-r a:hover { color: var(--gold); }
-    .copy {
-      text-align: center; padding: 18px 64px;
-      font-family: var(--mono); font-size: .58rem;
-      color: var(--text-dimmer); letter-spacing: .1em;
-      border-top: 1px solid var(--border); position: relative; z-index: 1;
+    footer .socials { margin-bottom: 20px; }
+    .footer-note {
+      font-family: var(--font-mono);
+      font-size: .75rem;
+      color: var(--text-muted);
     }
 
-    /* ─── Reveal ─── */
-    .reveal {
-      opacity: 0; transform: translateY(28px);
-      transition: opacity .85s ease, transform .85s ease;
-    }
-    .reveal.on { opacity: 1; transform: none; }
-
-    /* ─── Keyframes ─── */
+    /* ─── Fade-in ────────────────────────────────────────────── */
     @keyframes up {
-      from { opacity: 0; transform: translateY(22px); }
-      to   { opacity: 1; transform: none; }
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
-    @keyframes fadeIn {
-      from { opacity: 0; } to { opacity: 1; }
-    }
+    header              { animation: up .55s ease both; animation-delay: .04s; }
+    .rule-top           { animation: up .55s ease both; animation-delay: .12s; }
+    main section:nth-child(1) { animation: up .55s ease both; animation-delay: .16s; }
+    main section:nth-child(2) { animation: up .55s ease both; animation-delay: .22s; }
+    main section:nth-child(3) { animation: up .55s ease both; animation-delay: .26s; }
+    main section:nth-child(4) { animation: up .55s ease both; animation-delay: .30s; }
+    main section:nth-child(5) { animation: up .55s ease both; animation-delay: .34s; }
+    .rule-bot           { animation: up .55s ease both; animation-delay: .38s; }
+    footer              { animation: up .55s ease both; animation-delay: .42s; }
 
-    /* ─── Mobile ─── */
-    @media (max-width: 780px) {
-      body { cursor: auto; }
-      #cur, #cur-ring { display: none; }
-      nav, nav.scrolled { padding: 18px 24px; }
-      .nav-links { display: none; }
-      #hero { padding: 0 24px; }
-      .scroll-cue { left: 24px; }
-      #about { padding: 80px 24px; grid-template-columns: 1fr; gap: 40px; }
-      #experience, #projects, #education, #interests { padding: 80px 24px; }
-      .exp-grid { grid-template-columns: 1fr; }
-      .proj-item { padding: 32px 24px; }
-      .edu-line { padding-left: 32px; margin-left: 14px; }
-      footer { padding: 60px 24px; flex-direction: column; gap: 32px; }
-      .footer-r { gap: 16px; }
+    /* ─── Responsive ─────────────────────────────────────────── */
+    @media (max-width: 560px) {
+      :root { --pad-x: 20px; }
+      header { padding-top: 48px; }
+      .entry { grid-template-columns: 1fr; }
+      .entry-when { grid-row: 2; grid-column: 1; margin-top: -4px; }
+      .entry-body { grid-row: 3; }
+      .skill-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Background elements -->
-  <canvas id="stars"></canvas>
-  <div class="blob blob-a"></div>
-  <div class="blob blob-b"></div>
+<!-- ── Cosmic starfield ──────────────────────────────────────── -->
+<canvas id="cosmos"></canvas>
 
-  <!-- Custom cursor -->
-  <div id="cur"></div>
-  <div id="cur-ring"></div>
+<div class="wrap">
+  <a href="#main" class="skip">Skip to content</a>
 
-  <!-- Nav -->
-  <nav id="nav">
-    <a class="nav-logo" href="#hero">HK_</a>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#experience">Experience</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#education">Education</a></li>
-      <li><a href="mailto:hiral.kumar2006@gmail.com">Contact</a></li>
-    </ul>
-  </nav>
-
-  <!-- ── HERO ── -->
-  <section id="hero">
-    <p class="hero-eyebrow">Open to AI/ML Internships</p>
-    <h1 class="hero-name">Hiral <em>Kumar</em></h1>
-    <p class="hero-sub">B.Tech CSE '29 &nbsp;·&nbsp; GBU, Greater Noida &nbsp;·&nbsp; AWS Cloud Club AI/ML</p>
-    <p class="hero-bio">
-      A first-year CS student driven by curiosity — from the physics of stars
-      to the math behind machine learning. Building at the intersection of
-      code, data, and ideas.
+  <!-- ── HEADER ────────────────────────────────────────────── -->
+  <header>
+    <h1>Hiral Kumar</h1>
+    <span class="handle">@Hiral-Kumar &nbsp;·&nbsp; Entering the cosmos… ⚡</span>
+    <p class="bio">
+      <strong>B.Tech CSE @ GBU, Greater Noida (2025–2029).</strong>
+      AI/ML Core Member at AWS Cloud Club — 1 of 9 selected from 30+ applicants.
+      Campus Partner for Perplexity AI across Delhi NCR.
+      Building at the intersection of machine learning, embedded systems, and the occasional physics rabbit hole.
+      NAEST State Rank 5 under Prof. H.C. Verma · IIT Kanpur.
     </p>
-    <div class="hero-cta">
-      <a class="btn btn-gold" href="https://github.com/Hiral-Kumar" target="_blank">GitHub ↗</a>
-      <a class="btn btn-ghost" href="mailto:hiral.kumar2006@gmail.com">Email Me</a>
-    </div>
-    <div class="scroll-cue">scroll</div>
-  </section>
+    <ul class="socials">
+      <li>
+        <a href="https://github.com/Hiral-Kumar" target="_blank" rel="noopener">
+          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          GitHub
+        </a>
+      </li>
+      <li>
+        <a href="https://linkedin.com/in/hiral-kumar" target="_blank" rel="noopener">
+          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          LinkedIn
+        </a>
+      </li>
+      <li>
+        <a href="mailto:hiral.kumar2006@gmail.com">
+          <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+          Email
+        </a>
+      </li>
+      <li>
+        <a href="https://x.com/KumarHiral" target="_blank" rel="noopener">
+          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          X
+        </a>
+      </li>
+      <li>
+        <a href="https://youtube.com/@hiral_kumar" target="_blank" rel="noopener">
+          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          YouTube
+        </a>
+      </li>
+    </ul>
+  </header>
 
-  <!-- ── ABOUT ── -->
-  <section id="about">
-    <div class="reveal">
-      <div class="sec-label">01 — About</div>
-      <h2 class="about-h">Curiosity is the only compass I need.</h2>
-      <p class="about-p">
-        I'm a B.Tech CSE student at Gautam Buddha University, Greater Noida — originally from South Delhi.
-        The cosmos of science and technology has always pulled me in: from electrodynamics and astrophysics
-        to the evolving landscape of AI and machine learning.<br><br>
-        I'm at the beginning of a long journey. I intend to make it count.
-      </p>
-    </div>
-    <div class="reveal" style="transition-delay:.18s">
-      <div class="data-rows">
-        <div class="drow"><span class="dlabel">Location</span><span class="dval">South Delhi / Greater Noida</span></div>
-        <div class="drow"><span class="dlabel">Institute</span><span class="dval">GBU, Greater Noida</span></div>
-        <div class="drow"><span class="dlabel">Year</span><span class="dval">1st Year — B.Tech CSE (2025–2029)</span></div>
-        <div class="drow"><span class="dlabel">Focus</span><span class="dval">AI / ML &nbsp;·&nbsp; Data Science</span></div>
-        <div class="drow"><span class="dlabel">Email</span><span class="dval"><a href="mailto:hiral.kumar2006@gmail.com">hiral.kumar2006@gmail.com</a></span></div>
-        <div class="drow"><span class="dlabel">GitHub</span><span class="dval"><a href="https://github.com/Hiral-Kumar" target="_blank">github.com/Hiral-Kumar</a></span></div>
+  <hr class="rule rule-top">
+
+  <!-- ── MAIN ──────────────────────────────────────────────── -->
+  <main id="main">
+
+    <!-- EXPERIENCE -->
+    <section>
+      <h2 class="label">Experience</h2>
+      <ul class="entries">
+        <li class="entry">
+          <span class="entry-title">AI/ML Core Member — AWS Cloud Club, GBU</span>
+          <span class="entry-when">Jan 2026 – Present</span>
+          <div class="entry-body">
+            Selected 1 of 9 from 30+ applicants via competitive interview. Delivered live seminars on AWS ML workflows and shipped an end-to-end mentored ML pipeline. Built a <strong>Movie Recommendation System</strong> under AWS Builder Group mentorship — raw CSV through SVD training to Flask deployment.
+          </div>
+        </li>
+        <li class="entry">
+          <span class="entry-title">Campus Partner — Perplexity AI&nbsp;&nbsp;<span style="font-weight:400;color:var(--text-muted)">· Remote</span></span>
+          <span class="entry-when">Sep – Dec 2025</span>
+          <div class="entry-body">
+            Owned full user-acquisition funnel for Delhi NCR — campaign design, onboarding flows, and conversion tracking via Dub Analytics. Performance directly converted to monetary incentives.
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <hr class="rule">
+
+    <!-- PROJECTS -->
+    <section>
+      <h2 class="label">Projects</h2>
+      <ul class="entries">
+        <li class="entry">
+          <span class="entry-title">
+            <a href="https://github.com/Hiral-Kumar/GuardianX" target="_blank" rel="noopener">GuardianX — Women Safety Toolkit</a>
+          </span>
+          <span class="entry-when">Apr 2026</span>
+          <div class="entry-body">
+            Multi-layer safety app with three interlocking subsystems: <strong>SentinelAI</strong> detects threats via motion + voice and auto-triggers alerts. <strong>SafeMesh</strong> builds an offline BLE/WiFi mesh that warns nearby GuardianX users. <strong>AlertChain</strong> simultaneously notifies family, police &amp; nearby strangers. <em>igNITionHack 2.0 finalist.</em>
+            <div class="chips">
+              <span class="chip">Flutter</span><span class="chip">Dart</span><span class="chip">Java</span><span class="chip">BLE</span><span class="chip">WiFi Mesh</span><span class="chip">AI</span>
+            </div>
+          </div>
+        </li>
+        <li class="entry">
+          <span class="entry-title">Movie Recommendation System</span>
+          <span class="entry-when">Apr 2026</span>
+          <div class="entry-body">
+            10-stage AI/ML pipeline on MovieLens 100K (100K ratings, 943 users, 1,682 movies) — problem framing through batch inference. Selected <strong>SVD / Matrix Factorisation</strong> after benchmarking Popularity, KNN-CF, and Neural CF. Achieved <strong>RMSE &lt; 1.0</strong> and <strong>Precision@10 &gt; 0.6</strong> via L2 regularisation + 5-Fold CV. Cold-start fallback routes new users to popularity recs until ≥ 5 ratings.
+            <div class="chips">
+              <span class="chip">Python</span><span class="chip">SVD</span><span class="chip">Scikit-learn</span><span class="chip">Flask</span><span class="chip">AWS</span>
+            </div>
+          </div>
+        </li>
+        <li class="entry">
+          <span class="entry-title">
+            <a href="https://github.com/Hiral-Kumar/pass_fail_predictor" target="_blank" rel="noopener">Pass / Fail Predictor</a>
+          </span>
+          <span class="entry-when">Feb 2026</span>
+          <div class="entry-body">
+            Trained on 10,000 student records; outputs <strong>risk % + natural-language reasoning</strong> per prediction. Explainable ML deployed as a live Streamlit app on GitHub Pages.
+            <div class="chips">
+              <span class="chip">Python</span><span class="chip">Logistic Regression</span><span class="chip">Streamlit</span><span class="chip">GitHub Pages</span>
+            </div>
+          </div>
+        </li>
+        <li class="entry">
+          <span class="entry-title">TriSecure Access System</span>
+          <span class="entry-when">Nov 2025</span>
+          <div class="entry-body">
+            3-layer security architecture on a single Arduino UNO — Authentication (RFID + PIN), Adaptive Mode (single ↔ dual-factor), Admin Control (master code + brute-force lockout). Dual-factor Mode B defeats card-cloning and PIN-observation attacks simultaneously. 3-strike lockout (30s timeout) blocks automated enumeration. <strong>Dean's recognition</strong> + shortlisted for campus-wide scaling — only ICT Workshop project to attract institutional funding interest.
+            <div class="chips">
+              <span class="chip">Arduino UNO</span><span class="chip">RC522 RFID</span><span class="chip">Embedded C</span><span class="chip">ESP32</span><span class="chip">NodeMCU</span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <hr class="rule">
+
+    <!-- SKILLS -->
+    <section>
+      <h2 class="label">Skills</h2>
+      <div class="skill-grid">
+        <div class="skill-cat">
+          <h4>ML / Data</h4>
+          <p>Python · Scikit-learn · Pandas · NumPy · SVD · Logistic Regression · Streamlit · Jupyter</p>
+        </div>
+        <div class="skill-cat">
+          <h4>Engineering</h4>
+          <p>C · C++ · Java · HTML / CSS · SQL · Arduino · Embedded C · Git · GitHub · Flask</p>
+        </div>
+        <div class="skill-cat">
+          <h4>Cloud</h4>
+          <p>AWS (active learner) · Google Play Console</p>
+        </div>
+        <div class="skill-cat">
+          <h4>Concepts</h4>
+          <p>Collaborative Filtering · Gradient Descent · L2 Regularisation · K-Fold CV · Precision@K · RMSE · MFA</p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ── EXPERIENCE ── -->
-  <section id="experience">
-    <div class="reveal">
-      <div class="sec-label">02 — Experience</div>
-      <h2 class="sec-h">Where I've been building.</h2>
-    </div>
-    <div class="exp-grid reveal" style="transition-delay:.2s">
-      <div class="exp-card">
-        <p class="exp-org">AWS Cloud Club · GBU</p>
-        <h3 class="exp-role">Core Member — AI/ML Team</h3>
-        <p class="exp-period">2025 — Present</p>
-        <p class="exp-desc">
-          Contributing to the AI/ML vertical of the AWS Student Community at GBU —
-          collaborating on cloud-powered ML projects, internal workshops, and community
-          events including AWS Student Community Day Delhi NCR 2026 at Sharda University.
-        </p>
-      </div>
-      <div class="exp-card">
-        <p class="exp-org">Perplexity AI</p>
-        <h3 class="exp-role">Campus Partner</h3>
-        <p class="exp-period">2025</p>
-        <p class="exp-desc">
-          Represented Perplexity AI on campus — driving awareness of AI-powered search
-          among peers and contributing to grassroots student community growth across GBU.
-        </p>
-      </div>
-    </div>
-  </section>
+    <hr class="rule">
 
-  <!-- ── PROJECTS ── -->
-  <section id="projects">
-    <div class="reveal">
-      <div class="sec-label">03 — Projects</div>
-      <h2 class="sec-h">Things I've built.</h2>
-    </div>
-    <div class="proj-list reveal" style="transition-delay:.2s">
-
-      <a class="proj-item" href="https://github.com/Hiral-Kumar" target="_blank">
-        <div>
-          <p class="proj-num">001</p>
-          <h3 class="proj-name">Pass / Fail Predictor</h3>
-          <p class="proj-desc">
-            A machine learning classifier trained on 10,000 student records to predict academic outcomes.
-            Built with Logistic Regression and deployed as an interactive Streamlit web app.
-          </p>
-          <div class="proj-tags">
-            <span class="ptag">Python</span>
-            <span class="ptag">Scikit-learn</span>
-            <span class="ptag">Logistic Regression</span>
-            <span class="ptag">Streamlit</span>
-            <span class="ptag">GitHub Pages</span>
+    <!-- EDUCATION -->
+    <section>
+      <h2 class="label">Education</h2>
+      <div class="edu-wrap">
+        <div class="edu-item">
+          <div class="edu-deg">B.Tech — Computer Science &amp; Engineering</div>
+          <div class="edu-school">Gautam Buddha University (GBU), Greater Noida, Delhi NCR</div>
+          <div class="edu-meta">Jul 2025 – Jul 2029&nbsp;&nbsp;·&nbsp;&nbsp;1st Sem SGPA: 8.73</div>
+          <div class="edu-courses">Discrete Mathematics · Digital Logic Design · C Programming · Java</div>
+        </div>
+        <div class="edu-item">
+          <div class="edu-deg">Class 10th &amp; 12th — CBSE</div>
+          <div class="edu-school">B.D.P.S., Delhi</div>
+          <div class="edu-meta">2020 – 2024&nbsp;&nbsp;·&nbsp;&nbsp;90.2% (10th)&nbsp;&nbsp;·&nbsp;&nbsp;88.6% (12th)</div>
+          <div style="margin-top:10px">
+            <span class="badge">★&nbsp; NAEST State Rank 5 — IIT Kanpur · Prof. H.C. Verma</span>
           </div>
         </div>
-        <div class="proj-arrow">↗</div>
-      </a>
+      </div>
+    </section>
 
-      <a class="proj-item" href="https://github.com/Hiral-Kumar" target="_blank">
-        <div>
-          <p class="proj-num">002</p>
-          <h3 class="proj-name">Movie Recommendation System <span class="proj-wip">— in progress</span></h3>
-          <p class="proj-desc">
-            An end-to-end collaborative filtering pipeline using SVD and Matrix Factorization
-            on the MovieLens 100K dataset. Exploring how recommendation engines balance
-            accuracy with discovery.
-          </p>
-          <div class="proj-tags">
-            <span class="ptag">Python</span>
-            <span class="ptag">SVD</span>
-            <span class="ptag">Matrix Factorization</span>
-            <span class="ptag">MovieLens 100K</span>
-            <span class="ptag">Pandas</span>
+    <hr class="rule">
+
+    <!-- CERTIFICATIONS -->
+    <section>
+      <h2 class="label">Certifications &amp; Highlights</h2>
+      <ul class="entries">
+        <li class="entry">
+          <span class="entry-title">NAEST — National Anveshika Experimental Skill Test</span>
+          <span class="entry-when">2024</span>
+          <div class="entry-body">
+            <strong>State Rank 5</strong> under Prof. H.C. Verma, IIT Kanpur. Experimental physics competition testing hands-on scientific skill.
           </div>
-        </div>
-        <div class="proj-arrow">↗</div>
-      </a>
+        </li>
+        <li class="entry">
+          <span class="entry-title">igNITionHack 2.0 — Final Round</span>
+          <span class="entry-when">Apr 2026</span>
+          <div class="entry-body">Dept. of IT, USICT, GBU. GuardianX selected through to the hackathon finals.</div>
+        </li>
+        <li class="entry">
+          <span class="entry-title">GSSoC &amp; SSoC — Contributor / Mentee</span>
+          <span class="entry-when">Apr 2026</span>
+          <div class="entry-body">GirlScript Summer of Code &amp; Social Summer of Code contributor and open-source mentee.</div>
+        </li>
+        <li class="entry">
+          <span class="entry-title">MICRO 13th International Conference</span>
+          <span class="entry-when">Apr 2026</span>
+          <div class="entry-body">Dept. of ECE, Gautam Buddha University.</div>
+        </li>
+        <li class="entry">
+          <span class="entry-title">Google Play Academy — Store Listing Certificate</span>
+          <span class="entry-when">Jul 2025</span>
+          <div class="entry-body">Google Play Alumni Network certification.</div>
+        </li>
+      </ul>
+    </section>
 
-    </div>
+  </main>
 
-    <!-- Hackathon callout -->
-    <div class="reveal" style="transition-delay:.35s; margin-top: 1px; background: var(--gold-dim); border: 1px solid var(--border-gold); padding: 32px 52px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
-      <div>
-        <p style="font-family: var(--mono); font-size: .62rem; color: var(--gold); letter-spacing: .16em; text-transform: uppercase; margin-bottom: 6px;">Achievement</p>
-        <p style="font-size: 1.1rem; font-weight: 400;">igNITionHack 2.0 — Finalist</p>
-        <p style="font-family: var(--mono); font-size: .7rem; color: var(--text-dim); margin-top: 4px;">AI/ML Pipeline Track · AWS Cloud Clubs at GBU</p>
-      </div>
-      <div style="font-size: 2rem; color: var(--gold); opacity: .5;">◈</div>
-    </div>
-  </section>
+  <hr class="rule rule-bot">
 
-  <!-- ── EDUCATION ── -->
-  <section id="education">
-    <div class="reveal">
-      <div class="sec-label">04 — Education</div>
-      <h2 class="sec-h">Foundations.</h2>
-    </div>
-    <div class="edu-line reveal" style="transition-delay:.2s">
-      <div class="edu-item">
-        <p class="edu-year">2025 — 2029</p>
-        <h3 class="edu-inst">Gautam Buddha University</h3>
-        <p class="edu-detail">B.Tech Computer Science & Engineering &nbsp;·&nbsp; Greater Noida</p>
-      </div>
-      <div class="edu-item">
-        <p class="edu-year">Class XII &nbsp;·&nbsp; CBSE &nbsp;·&nbsp; 2025</p>
-        <h3 class="edu-inst">BDPS</h3>
-        <p class="edu-detail">88.6% &nbsp;·&nbsp; PCM + Computer Science</p>
-      </div>
-      <div class="edu-item">
-        <p class="edu-year">Class X &nbsp;·&nbsp; CBSE</p>
-        <h3 class="edu-inst">VNS Saket, New Delhi</h3>
-        <p class="edu-detail">90.2%</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── INTERESTS ── -->
-  <section id="interests">
-    <div class="reveal">
-      <div class="sec-label">05 — Interests & Skills</div>
-      <h2 class="interest-h">What I think about.</h2>
-      <div class="tag-cloud">
-        <span class="itag lit">machine learning</span>
-        <span class="itag lit">astrophysics</span>
-        <span class="itag lit">physical AI</span>
-        <span class="itag">quantum physics</span>
-        <span class="itag">electrodynamics</span>
-        <span class="itag">data science</span>
-        <span class="itag">python</span>
-        <span class="itag">space exploration</span>
-        <span class="itag">anime drawing</span>
-        <span class="itag">football</span>
-        <span class="itag">fitness</span>
-        <span class="itag">sci-fi</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── FOOTER ── -->
-  <footer class="reveal">
-    <div>
-      <p class="footer-sign">Let's build something <span>interesting.</span></p>
-      <p class="footer-email">hiral.kumar2006@gmail.com</p>
-    </div>
-    <div class="footer-r">
-      <a href="https://github.com/Hiral-Kumar" target="_blank">GitHub</a>
-      <a href="mailto:hiral.kumar2006@gmail.com">Email</a>
-    </div>
+  <!-- ── FOOTER ────────────────────────────────────────────── -->
+  <footer>
+    <ul class="socials">
+      <li><a href="https://github.com/Hiral-Kumar" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="https://linkedin.com/in/hiral-kumar" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="https://x.com/KumarHiral" target="_blank" rel="noopener">X</a></li>
+      <li><a href="mailto:hiral.kumar2006@gmail.com">Email</a></li>
+      <li><a href="https://youtube.com/@hiral_kumar" target="_blank" rel="noopener">YouTube</a></li>
+      <li><a href="tel:+918527023035">+91 85270 23035</a></li>
+    </ul>
+    <p class="footer-note">
+      Hiral Kumar &nbsp;·&nbsp; B.Tech CSE '29 &nbsp;·&nbsp; South Delhi, India &nbsp;·&nbsp;
+      <a href="https://github.com/Hiral-Kumar/Hiral-Kumar.github.io" target="_blank" rel="noopener">source on GitHub ↗</a>
+    </p>
   </footer>
-  <p class="copy">© 2025 Hiral Kumar &nbsp;·&nbsp; designed with curiosity</p>
+</div>
 
-  <!-- ─────────── JS ─────────── -->
-  <script>
-    // ── Stars canvas ──
-    const cvs = document.getElementById('stars');
-    const ctx = cvs.getContext('2d');
-    let W, H, pts = [];
+<!-- ── Starfield + subtle grain ──────────────────────────── -->
+<script>
+  (() => {
+    const canvas = document.getElementById('cosmos');
+    const ctx = canvas.getContext('2d');
+    let W, H, stars, raf;
+
+    const N = 180;
 
     function resize() {
-      W = cvs.width  = window.innerWidth;
-      H = cvs.height = window.innerHeight;
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
     }
 
-    function mkStars() {
-      pts = [];
-      for (let i = 0; i < 220; i++) {
-        pts.push({
-          x: Math.random() * W,
-          y: Math.random() * H,
-          r: Math.random() * 1.1 + 0.2,
-          a: Math.random() * .5 + .05,
-          spd: Math.random() * .06 + .008,
-          phase: Math.random() * Math.PI * 2
-        });
-      }
+    function mkStar() {
+      return {
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() * 1.1 + 0.15,
+        a: Math.random(),
+        da: (Math.random() - 0.5) * 0.006,
+        vy: Math.random() * 0.18 + 0.04,
+        hue: Math.random() > 0.85 ? 220 : 260   // mostly white-blue, some warm
+      };
     }
 
-    function drawStars(t) {
+    function init() {
+      resize();
+      stars = Array.from({ length: N }, mkStar);
+    }
+
+    function frame() {
       ctx.clearRect(0, 0, W, H);
-      pts.forEach(p => {
-        p.phase += .008;
-        const alpha = p.a + Math.sin(p.phase) * .12;
+      for (const s of stars) {
+        s.a += s.da;
+        if (s.a > 1 || s.a < 0) s.da *= -1;
+        s.y += s.vy;
+        if (s.y > H + 4) { s.y = -4; s.x = Math.random() * W; }
+
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(212,168,83,${Math.max(0, alpha)})`;
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${s.hue},60%,90%,${s.a * 0.55})`;
         ctx.fill();
-        p.y -= p.spd;
-        if (p.y < -2) { p.y = H + 2; p.x = Math.random() * W; }
-      });
-      requestAnimationFrame(drawStars);
+      }
+      raf = requestAnimationFrame(frame);
     }
 
-    window.addEventListener('resize', () => { resize(); mkStars(); });
-    resize(); mkStars(); drawStars();
+    init();
+    frame();
+    window.addEventListener('resize', () => { resize(); });
+  })();
+</script>
 
-    // ── Custom cursor ──
-    const cur  = document.getElementById('cur');
-    const ring = document.getElementById('cur-ring');
-    let mx = 0, my = 0, rx = 0, ry = 0;
-
-    document.addEventListener('mousemove', e => {
-      mx = e.clientX; my = e.clientY;
-      cur.style.left = mx + 'px';
-      cur.style.top  = my + 'px';
-    });
-
-    (function animRing() {
-      rx += (mx - rx) * .11;
-      ry += (my - ry) * .11;
-      ring.style.left = rx + 'px';
-      ring.style.top  = ry + 'px';
-      requestAnimationFrame(animRing);
-    })();
-
-    document.querySelectorAll('a, button, .exp-card, .itag').forEach(el => {
-      el.addEventListener('mouseenter', () => document.body.classList.add('hovered'));
-      el.addEventListener('mouseleave', () => document.body.classList.remove('hovered'));
-    });
-
-    // ── Nav shrink on scroll ──
-    const nav = document.getElementById('nav');
-    window.addEventListener('scroll', () => {
-      nav.classList.toggle('scrolled', window.scrollY > 50);
-    });
-
-    // ── Scroll reveal ──
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('on');
-          io.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
-
-    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-
-    // ── Stagger child reveals with slight delay offsets ──
-    document.querySelectorAll('.exp-card, .proj-item, .edu-item, .drow').forEach((el, i) => {
-      el.style.transition = `opacity .6s ease ${i * 0.07}s, background .3s`;
-    });
-  </script>
 </body>
 </html>
