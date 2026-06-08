@@ -1,5 +1,6 @@
+cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,8 +17,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,300;0,400;0,600;0,700;0,900;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
-    /* ─── Variables ─────────────────────────────────────────── */
-    :root {
+    /* ─── Dark theme (default) ──────────────────────────────── */
+    :root,
+    [data-theme="dark"] {
       --bg:            #07070f;
       --surface:       #0c0d18;
       --surface-hi:    #11121f;
@@ -29,12 +31,41 @@
       --accent:        #e8b96a;
       --accent-dim:    rgba(232,185,106,0.08);
       --accent-ring:   rgba(232,185,106,0.22);
-      --font-sans:     'Plus Jakarta Sans', system-ui, sans-serif;
-      --font-display:  'Epilogue', system-ui, sans-serif;
-      --font-mono:     'JetBrains Mono', ui-monospace, monospace;
-      --col:           680px;
-      --pad-x:         28px;
-      --radius:        6px;
+      --resume-bg:     #e8b96a;
+      --resume-text:   #07070f;
+      --toggle-bg:     #1c1e30;
+      --toggle-border: #2c2f48;
+      --toggle-color:  #c0c4e0;
+    }
+
+    /* ─── Light theme ───────────────────────────────────────── */
+    [data-theme="light"] {
+      --bg:            #ffffff;
+      --surface:       #f4f5fb;
+      --surface-hi:    #eceef8;
+      --border:        #e0e2f0;
+      --border-hi:     #c8cce8;
+      --text:          #3a3c58;
+      --text-bright:   #0d0e1a;
+      --text-muted:    #9496b0;
+      --accent:        #b07020;
+      --accent-dim:    rgba(176,112,32,0.07);
+      --accent-ring:   rgba(176,112,32,0.2);
+      --resume-bg:     #0d0e1a;
+      --resume-text:   #ffffff;
+      --toggle-bg:     #f4f5fb;
+      --toggle-border: #e0e2f0;
+      --toggle-color:  #3a3c58;
+    }
+
+    /* ─── Shared vars ───────────────────────────────────────── */
+    :root {
+      --font-sans:    'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-display: 'Epilogue', system-ui, sans-serif;
+      --font-mono:    'JetBrains Mono', ui-monospace, monospace;
+      --col:          680px;
+      --pad-x:        28px;
+      --radius:       6px;
     }
 
     /* ─── Reset ─────────────────────────────────────────────── */
@@ -49,6 +80,7 @@
       line-height: 1.7;
       min-height: 100vh;
       overflow-x: hidden;
+      transition: background .35s, color .35s;
     }
 
     /* ─── Canvas starfield ───────────────────────────────────── */
@@ -57,6 +89,33 @@
       inset: 0;
       z-index: 0;
       pointer-events: none;
+      transition: opacity .45s;
+    }
+    [data-theme="light"] #cosmos { opacity: 0; }
+
+    /* ─── Theme toggle ───────────────────────────────────────── */
+    #theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      background: var(--toggle-bg);
+      border: 1px solid var(--toggle-border);
+      color: var(--toggle-color);
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      padding: 6px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background .2s, border-color .2s, color .2s;
+      user-select: none;
+    }
+    #theme-toggle:hover {
+      border-color: var(--border-hi);
+      background: var(--surface-hi);
     }
 
     /* ─── Wrapper ────────────────────────────────────────────── */
@@ -85,28 +144,19 @@
     .skip:focus { top: 16px; }
 
     /* ─── Links ──────────────────────────────────────────────── */
-    a { color: var(--accent); text-decoration: none; transition: color .18s, opacity .18s; }
-    a:hover { color: #f5d492; text-decoration: underline; }
+    a { color: var(--accent); text-decoration: none; transition: color .18s; }
+    a:hover { filter: brightness(1.2); text-decoration: underline; }
 
     /* ─── Divider ────────────────────────────────────────────── */
     .rule {
       border: none;
       border-top: 1px solid var(--border);
       margin: 44px 0;
+      transition: border-color .35s;
     }
 
     /* ─── Header ─────────────────────────────────────────────── */
     header { padding: 72px 0 0; }
-
-    .avatar {
-      display: block;
-      width: 76px; height: 76px;
-      border-radius: 50%;
-      border: 2px solid var(--border-hi);
-      margin-bottom: 28px;
-      transition: border-color .3s, transform .3s;
-    }
-    .avatar:hover { border-color: var(--accent); transform: scale(1.04); }
 
     h1 {
       font-family: var(--font-display);
@@ -116,6 +166,7 @@
       letter-spacing: -0.025em;
       line-height: 1.15;
       margin-bottom: 6px;
+      transition: color .35s;
     }
     .handle {
       font-family: var(--font-mono);
@@ -123,16 +174,90 @@
       color: var(--accent);
       letter-spacing: .04em;
       display: block;
-      margin-bottom: 18px;
+      margin-bottom: 22px;
     }
-    .bio {
-      font-size: .97rem;
-      color: var(--text);
-      max-width: 540px;
+
+    /* ─── Terminal window ────────────────────────────────────── */
+    /* Always dark — a terminal is always a terminal */
+    .terminal {
+      background: #0d0e1c;
+      border: 1px solid #1e2038;
+      border-radius: 10px;
+      overflow: hidden;
       margin-bottom: 28px;
-      line-height: 1.65;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.45);
+      transition: box-shadow .35s;
     }
-    .bio strong { color: var(--text-bright); font-weight: 600; }
+    [data-theme="light"] .terminal {
+      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+      border-color: #2a2c48;
+    }
+
+    .term-chrome {
+      background: #161728;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 0;
+      border-bottom: 1px solid #1e2038;
+    }
+    .dots {
+      display: flex;
+      gap: 6px;
+      margin-right: 12px;
+    }
+    .dot {
+      width: 11px; height: 11px;
+      border-radius: 50%;
+    }
+    .dot-r { background: #ff5f57; }
+    .dot-y { background: #febc2e; }
+    .dot-g { background: #28c840; }
+
+    .term-title {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      color: #5a5f82;
+      flex: 1;
+      text-align: center;
+    }
+
+    .term-body {
+      padding: 18px 20px 20px;
+      font-family: var(--font-mono);
+      font-size: .82rem;
+      line-height: 1.85;
+      min-height: 80px;
+    }
+
+    .term-line {
+      display: block;
+      white-space: pre;
+    }
+
+    /* Syntax colours — fixed, not theme-dependent */
+    .t-kw   { color: #e8b96a; }   /* keyword: const */
+    .t-var  { color: #e6e9f8; }   /* variable name  */
+    .t-op   { color: #5a5f82; }   /* = { } ,        */
+    .t-prop { color: #93c5fd; }   /* property keys  */
+    .t-str  { color: #86efac; }   /* string values  */
+    .t-cmt  { color: #404468; font-style: italic; } /* comments */
+    .t-num  { color: #f9a8d4; }   /* numbers        */
+
+    /* Blinking cursor */
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      background: #e8b96a;
+      vertical-align: text-bottom;
+      margin-left: 1px;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
 
     /* ─── Social pills ───────────────────────────────────────── */
     .socials {
@@ -159,8 +284,27 @@
       border-color: var(--border-hi);
       background: var(--surface-hi);
       text-decoration: none;
+      filter: none;
     }
     .socials a svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+    .resume-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: .75rem;
+      font-weight: 500;
+      color: var(--resume-text) !important;
+      background: var(--resume-bg);
+      border: 1px solid transparent;
+      padding: 5px 14px;
+      border-radius: 999px;
+      text-decoration: none !important;
+      transition: opacity .18s;
+    }
+    .resume-btn:hover { opacity: .85; filter: none !important; text-decoration: none !important; }
+    .resume-btn svg { width: 12px; height: 12px; }
 
     /* ─── Section label ──────────────────────────────────────── */
     .label {
@@ -174,17 +318,18 @@
       align-items: center;
       gap: 14px;
       margin-bottom: 20px;
+      transition: color .35s;
     }
     .label::after {
       content: '';
       flex: 1;
       height: 1px;
       background: var(--border);
+      transition: background .35s;
     }
 
-    /* ─── Entry list (exp / projects / certs) ────────────────── */
+    /* ─── Entry list ─────────────────────────────────────────── */
     .entries { list-style: none; }
-
     .entry {
       display: grid;
       grid-template-columns: 1fr auto;
@@ -193,6 +338,7 @@
       row-gap: 5px;
       padding: 20px 0;
       border-bottom: 1px solid var(--border);
+      transition: border-color .35s;
     }
     .entries .entry:first-child { border-top: 1px solid var(--border); }
 
@@ -202,38 +348,32 @@
       font-weight: 700;
       color: var(--text-bright);
       line-height: 1.3;
-      grid-column: 1;
-      grid-row: 1;
+      grid-column: 1; grid-row: 1;
+      transition: color .35s;
     }
     .entry-title a { color: inherit; }
-    .entry-title a:hover { color: var(--accent); text-decoration: none; }
+    .entry-title a:hover { color: var(--accent); text-decoration: none; filter: none; }
 
     .entry-when {
       font-family: var(--font-mono);
       font-size: .72rem;
       color: var(--text-muted);
-      grid-column: 2;
-      grid-row: 1;
+      grid-column: 2; grid-row: 1;
       white-space: nowrap;
       padding-top: 3px;
+      transition: color .35s;
     }
-
     .entry-body {
       font-size: .86rem;
       color: var(--text-muted);
-      grid-column: 1 / -1;
-      grid-row: 2;
+      grid-column: 1 / -1; grid-row: 2;
       line-height: 1.6;
+      transition: color .35s;
     }
     .entry-body strong { color: var(--text); font-weight: 500; }
 
-    /* ─── Tag chips ──────────────────────────────────────────── */
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-      margin-top: 10px;
-    }
+    /* ─── Chips ──────────────────────────────────────────────── */
+    .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
     .chip {
       font-family: var(--font-mono);
       font-size: .67rem;
@@ -244,11 +384,7 @@
       border-radius: var(--radius);
       transition: color .15s, border-color .15s, background .15s;
     }
-    .chip:hover {
-      color: var(--accent);
-      border-color: var(--accent-ring);
-      background: var(--accent-dim);
-    }
+    .chip:hover { color: var(--accent); border-color: var(--accent-ring); background: var(--accent-dim); }
 
     /* ─── Badge ──────────────────────────────────────────────── */
     .badge {
@@ -264,11 +400,11 @@
       border-radius: var(--radius);
     }
 
-    /* ─── Skills grid ────────────────────────────────────────── */
+    /* ─── Skills (3-col) ─────────────────────────────────────── */
     .skill-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
     }
     .skill-cat h4 {
       font-family: var(--font-mono);
@@ -278,87 +414,64 @@
       color: var(--accent);
       margin-bottom: 8px;
     }
-    .skill-cat p {
-      font-size: .82rem;
-      color: var(--text-muted);
-      line-height: 1.75;
-    }
+    .skill-cat p { font-size: .82rem; color: var(--text-muted); line-height: 1.75; transition: color .35s; }
 
     /* ─── Education ──────────────────────────────────────────── */
     .edu-item {
       padding: 20px 0;
       border-bottom: 1px solid var(--border);
+      transition: border-color .35s;
     }
     .edu-wrap .edu-item:first-child { border-top: 1px solid var(--border); }
     .edu-item:last-child { border-bottom: none; }
-    .edu-deg {
-      font-family: var(--font-display);
-      font-size: .97rem;
-      font-weight: 700;
-      color: var(--text-bright);
-    }
-    .edu-school {
-      font-size: .85rem;
-      color: var(--text-muted);
-      margin-top: 3px;
-    }
-    .edu-meta {
-      font-family: var(--font-mono);
-      font-size: .73rem;
-      color: var(--accent);
-      margin-top: 5px;
-    }
-    .edu-courses {
-      font-size: .82rem;
-      color: var(--text-muted);
-      margin-top: 7px;
-    }
+    .edu-deg { font-family: var(--font-display); font-size: .97rem; font-weight: 700; color: var(--text-bright); transition: color .35s; }
+    .edu-school { font-size: .85rem; color: var(--text-muted); margin-top: 3px; transition: color .35s; }
+    .edu-meta { font-family: var(--font-mono); font-size: .73rem; color: var(--accent); margin-top: 5px; }
+    .edu-courses { font-size: .82rem; color: var(--text-muted); margin-top: 7px; transition: color .35s; }
 
-    /* ─── Main ───────────────────────────────────────────────── */
+    /* ─── Main / Footer ──────────────────────────────────────── */
     main { padding: 0 0 8px; }
     section { margin-bottom: 4px; }
-
-    /* ─── Footer ─────────────────────────────────────────────── */
-    footer {
-      padding: 36px 0 72px;
-    }
+    footer { padding: 36px 0 72px; }
     footer .socials { margin-bottom: 20px; }
-    .footer-note {
-      font-family: var(--font-mono);
-      font-size: .75rem;
-      color: var(--text-muted);
-    }
+    .footer-note { font-family: var(--font-mono); font-size: .75rem; color: var(--text-muted); transition: color .35s; }
 
     /* ─── Fade-in ────────────────────────────────────────────── */
     @keyframes up {
       from { opacity: 0; transform: translateY(18px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-    header              { animation: up .55s ease both; animation-delay: .04s; }
-    .rule-top           { animation: up .55s ease both; animation-delay: .12s; }
-    main section:nth-child(1) { animation: up .55s ease both; animation-delay: .16s; }
-    main section:nth-child(2) { animation: up .55s ease both; animation-delay: .22s; }
-    main section:nth-child(3) { animation: up .55s ease both; animation-delay: .26s; }
-    main section:nth-child(4) { animation: up .55s ease both; animation-delay: .30s; }
-    main section:nth-child(5) { animation: up .55s ease both; animation-delay: .34s; }
-    .rule-bot           { animation: up .55s ease both; animation-delay: .38s; }
-    footer              { animation: up .55s ease both; animation-delay: .42s; }
+    header                    { animation: up .55s ease both .04s; }
+    .rule-top                 { animation: up .55s ease both .14s; }
+    main section:nth-child(1) { animation: up .55s ease both .18s; }
+    main section:nth-child(2) { animation: up .55s ease both .24s; }
+    main section:nth-child(3) { animation: up .55s ease both .28s; }
+    main section:nth-child(4) { animation: up .55s ease both .32s; }
+    main section:nth-child(5) { animation: up .55s ease both .36s; }
+    .rule-bot                 { animation: up .55s ease both .40s; }
+    footer                    { animation: up .55s ease both .44s; }
 
     /* ─── Responsive ─────────────────────────────────────────── */
     @media (max-width: 560px) {
       :root { --pad-x: 20px; }
-      header { padding-top: 48px; }
+      header { padding-top: 52px; }
       .entry { grid-template-columns: 1fr; }
       .entry-when { grid-row: 2; grid-column: 1; margin-top: -4px; }
       .entry-body { grid-row: 3; }
       .skill-grid { grid-template-columns: 1fr 1fr; }
+      #theme-toggle { top: 14px; right: 14px; }
+      .term-body { font-size: .75rem; padding: 14px 14px 16px; }
     }
   </style>
 </head>
 <body>
 
-<!-- ── Cosmic starfield ──────────────────────────────────────── -->
 <canvas id="cosmos"></canvas>
+
+<button id="theme-toggle" aria-label="Toggle theme">
+  <span id="toggle-icon">☀️</span>
+  <span id="toggle-label">Light</span>
+</button>
 
 <div class="wrap">
   <a href="#main" class="skip">Skip to content</a>
@@ -367,13 +480,21 @@
   <header>
     <h1>Hiral Kumar</h1>
     <span class="handle">@Hiral-Kumar &nbsp;·&nbsp; Entering the cosmos… ⚡</span>
-    <p class="bio">
-      <strong>B.Tech CSE @ GBU, Greater Noida (2025–2029).</strong>
-      AI/ML Core Member at AWS Cloud Club — 1 of 9 selected from 30+ applicants.
-      Campus Partner for Perplexity AI across Delhi NCR.
-      Building at the intersection of machine learning, embedded systems, and the occasional physics rabbit hole.
-      NAEST State Rank 5 under Prof. H.C. Verma · IIT Kanpur.
-    </p>
+
+    <!-- ── Terminal bio ──────────────────────────────────── -->
+    <div class="terminal" id="terminal" aria-label="Bio as code">
+      <div class="term-chrome">
+        <div class="dots">
+          <span class="dot dot-r"></span>
+          <span class="dot dot-y"></span>
+          <span class="dot dot-g"></span>
+        </div>
+        <span class="term-title">hiral@portfolio ~ node bio.js</span>
+      </div>
+      <div class="term-body" id="term-body"></div>
+    </div>
+
+    <!-- ── Social pills ──────────────────────────────────── -->
     <ul class="socials">
       <li>
         <a href="https://github.com/Hiral-Kumar" target="_blank" rel="noopener">
@@ -405,12 +526,17 @@
           YouTube
         </a>
       </li>
+      <li>
+        <a href="resume.pdf" download="Hiral_Kumar_Resume.pdf" class="resume-btn">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+          Resume
+        </a>
+      </li>
     </ul>
   </header>
 
   <hr class="rule rule-top">
 
-  <!-- ── MAIN ──────────────────────────────────────────────── -->
   <main id="main">
 
     <!-- EXPERIENCE -->
@@ -446,7 +572,7 @@
           </span>
           <span class="entry-when">Apr 2026</span>
           <div class="entry-body">
-            Multi-layer safety app with three interlocking subsystems: <strong>SentinelAI</strong> detects threats via motion + voice and auto-triggers alerts. <strong>SafeMesh</strong> builds an offline BLE/WiFi mesh that warns nearby GuardianX users. <strong>AlertChain</strong> simultaneously notifies family, police &amp; nearby strangers. <em>igNITionHack 2.0 finalist.</em>
+            Multi-layer safety app: <strong>SentinelAI</strong> detects threats via motion + voice. <strong>SafeMesh</strong> builds an offline BLE/WiFi mesh alerting nearby users. <strong>AlertChain</strong> simultaneously notifies family, police &amp; nearby strangers. <em>igNITionHack 2.0 finalist.</em>
             <div class="chips">
               <span class="chip">Flutter</span><span class="chip">Dart</span><span class="chip">Java</span><span class="chip">BLE</span><span class="chip">WiFi Mesh</span><span class="chip">AI</span>
             </div>
@@ -456,7 +582,7 @@
           <span class="entry-title">Movie Recommendation System</span>
           <span class="entry-when">Apr 2026</span>
           <div class="entry-body">
-            10-stage AI/ML pipeline on MovieLens 100K (100K ratings, 943 users, 1,682 movies) — problem framing through batch inference. Selected <strong>SVD / Matrix Factorisation</strong> after benchmarking Popularity, KNN-CF, and Neural CF. Achieved <strong>RMSE &lt; 1.0</strong> and <strong>Precision@10 &gt; 0.6</strong> via L2 regularisation + 5-Fold CV. Cold-start fallback routes new users to popularity recs until ≥ 5 ratings.
+            10-stage AI/ML pipeline on MovieLens 100K — problem framing through batch inference. Selected <strong>SVD / Matrix Factorisation</strong> after benchmarking Popularity, KNN-CF, and Neural CF. Achieved <strong>RMSE &lt; 1.0</strong> and <strong>Precision@10 &gt; 0.6</strong> via L2 regularisation + 5-Fold CV.
             <div class="chips">
               <span class="chip">Python</span><span class="chip">SVD</span><span class="chip">Scikit-learn</span><span class="chip">Flask</span><span class="chip">AWS</span>
             </div>
@@ -468,7 +594,7 @@
           </span>
           <span class="entry-when">Feb 2026</span>
           <div class="entry-body">
-            Trained on 10,000 student records; outputs <strong>risk % + natural-language reasoning</strong> per prediction. Explainable ML deployed as a live Streamlit app on GitHub Pages.
+            Trained on 10,000 student records. Outputs <strong>risk % + natural-language reasoning</strong> per prediction — explainable ML, deployed as a live Streamlit app.
             <div class="chips">
               <span class="chip">Python</span><span class="chip">Logistic Regression</span><span class="chip">Streamlit</span><span class="chip">GitHub Pages</span>
             </div>
@@ -478,7 +604,7 @@
           <span class="entry-title">TriSecure Access System</span>
           <span class="entry-when">Nov 2025</span>
           <div class="entry-body">
-            3-layer security architecture on a single Arduino UNO — Authentication (RFID + PIN), Adaptive Mode (single ↔ dual-factor), Admin Control (master code + brute-force lockout). Dual-factor Mode B defeats card-cloning and PIN-observation attacks simultaneously. 3-strike lockout (30s timeout) blocks automated enumeration. <strong>Dean's recognition</strong> + shortlisted for campus-wide scaling — only ICT Workshop project to attract institutional funding interest.
+            3-layer security on a single Arduino UNO — Authentication (RFID + PIN), Adaptive Mode (single ↔ dual-factor), Admin Control (master code + brute-force lockout). <strong>Dean's recognition</strong> + shortlisted for campus-wide scaling.
             <div class="chips">
               <span class="chip">Arduino UNO</span><span class="chip">RC522 RFID</span><span class="chip">Embedded C</span><span class="chip">ESP32</span><span class="chip">NodeMCU</span>
             </div>
@@ -502,12 +628,8 @@
           <p>C · C++ · Java · HTML / CSS · SQL · Arduino · Embedded C · Git · GitHub · Flask</p>
         </div>
         <div class="skill-cat">
-          <h4>Cloud</h4>
-          <p>AWS (active learner) · Google Play Console</p>
-        </div>
-        <div class="skill-cat">
-          <h4>Concepts</h4>
-          <p>Collaborative Filtering · Gradient Descent · L2 Regularisation · K-Fold CV · Precision@K · RMSE · MFA</p>
+          <h4>Cloud &amp; Tools</h4>
+          <p>AWS (active learner) · Google Play Console · TinkerCAD · LaTeX</p>
         </div>
       </div>
     </section>
@@ -524,14 +646,6 @@
           <div class="edu-meta">Jul 2025 – Jul 2029&nbsp;&nbsp;·&nbsp;&nbsp;1st Sem SGPA: 8.73</div>
           <div class="edu-courses">Discrete Mathematics · Digital Logic Design · C Programming · Java</div>
         </div>
-        <div class="edu-item">
-          <div class="edu-deg">Class 10th &amp; 12th — CBSE</div>
-          <div class="edu-school">B.D.P.S., Delhi</div>
-          <div class="edu-meta">2020 – 2024&nbsp;&nbsp;·&nbsp;&nbsp;90.2% (10th)&nbsp;&nbsp;·&nbsp;&nbsp;88.6% (12th)</div>
-          <div style="margin-top:10px">
-            <span class="badge">★&nbsp; NAEST State Rank 5 — IIT Kanpur · Prof. H.C. Verma</span>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -544,14 +658,12 @@
         <li class="entry">
           <span class="entry-title">NAEST — National Anveshika Experimental Skill Test</span>
           <span class="entry-when">2024</span>
-          <div class="entry-body">
-            <strong>State Rank 5</strong> under Prof. H.C. Verma, IIT Kanpur. Experimental physics competition testing hands-on scientific skill.
-          </div>
+          <div class="entry-body"><strong>State Rank 5</strong> under Prof. H.C. Verma, IIT Kanpur. Experimental physics competition testing hands-on scientific skill.</div>
         </li>
         <li class="entry">
           <span class="entry-title">igNITionHack 2.0 — Final Round</span>
           <span class="entry-when">Apr 2026</span>
-          <div class="entry-body">Dept. of IT, USICT, GBU. GuardianX selected through to the hackathon finals.</div>
+          <div class="entry-body">Dept. of IT, USICT, GBU. GuardianX selected to the hackathon finals.</div>
         </li>
         <li class="entry">
           <span class="entry-title">GSSoC &amp; SSoC — Contributor / Mentee</span>
@@ -575,7 +687,6 @@
 
   <hr class="rule rule-bot">
 
-  <!-- ── FOOTER ────────────────────────────────────────────── -->
   <footer>
     <ul class="socials">
       <li><a href="https://github.com/Hiral-Kumar" target="_blank" rel="noopener">GitHub</a></li>
@@ -583,7 +694,6 @@
       <li><a href="https://x.com/KumarHiral" target="_blank" rel="noopener">X</a></li>
       <li><a href="mailto:hiral.kumar2006@gmail.com">Email</a></li>
       <li><a href="https://youtube.com/@hiral_kumar" target="_blank" rel="noopener">YouTube</a></li>
-      <li><a href="tel:+918527023035">+91 85270 23035</a></li>
     </ul>
     <p class="footer-note">
       Hiral Kumar &nbsp;·&nbsp; B.Tech CSE '29 &nbsp;·&nbsp; South Delhi, India &nbsp;·&nbsp;
@@ -592,58 +702,161 @@
   </footer>
 </div>
 
-<!-- ── Starfield + subtle grain ──────────────────────────── -->
 <script>
-  (() => {
-    const canvas = document.getElementById('cosmos');
-    const ctx = canvas.getContext('2d');
-    let W, H, stars, raf;
+/* ══════════════════════════════════════════════════════
+   THEME TOGGLE
+══════════════════════════════════════════════════════ */
+const html  = document.documentElement;
+const btn   = document.getElementById('theme-toggle');
+const icon  = document.getElementById('toggle-icon');
+const lbl   = document.getElementById('toggle-label');
 
-    const N = 180;
+function applyTheme(t) {
+  html.setAttribute('data-theme', t);
+  icon.textContent = t === 'dark' ? '☀️' : '🌙';
+  lbl.textContent  = t === 'dark' ? 'Light' : 'Dark';
+  try { localStorage.setItem('theme', t); } catch(e) {}
+}
+let saved = 'dark';
+try { saved = localStorage.getItem('theme') || 'dark'; } catch(e) {}
+applyTheme(saved);
+btn.addEventListener('click', () =>
+  applyTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark')
+);
 
-    function resize() {
-      W = canvas.width  = window.innerWidth;
-      H = canvas.height = window.innerHeight;
-    }
 
-    function mkStar() {
-      return {
-        x: Math.random() * W,
-        y: Math.random() * H,
-        r: Math.random() * 1.1 + 0.15,
-        a: Math.random(),
-        da: (Math.random() - 0.5) * 0.006,
-        vy: Math.random() * 0.18 + 0.04,
-        hue: Math.random() > 0.85 ? 220 : 260   // mostly white-blue, some warm
-      };
-    }
+/* ══════════════════════════════════════════════════════
+   TERMINAL TYPEWRITER
+   Each line = array of { t: text, c: cssClass }
+══════════════════════════════════════════════════════ */
+const LINES = [
+  [
+    { t: 'const ', c: 't-kw' }, { t: 'hiral', c: 't-var' }, { t: ' = {', c: 't-op' }
+  ],
+  [
+    { t: '  learning  ', c: 't-prop' }, { t: ': ', c: 't-op' },
+    { t: '["DSA in C++", "Full Stack Web Dev"]', c: 't-str' }, { t: ',', c: 't-op' }
+  ],
+  [
+    { t: '  building  ', c: 't-prop' }, { t: ': ', c: 't-op' },
+    { t: '"end-to-end apps · Python + AI models"', c: 't-str' }, { t: ',', c: 't-op' }
+  ],
+  [
+    { t: '  mindset   ', c: 't-prop' }, { t: ': ', c: 't-op' },
+    { t: '"engineer first, always"', c: 't-str' }, { t: ',', c: 't-op' }
+  ],
+  [
+    { t: '  interests ', c: 't-prop' }, { t: ': ', c: 't-op' },
+    { t: '["astrophysics", "quantum", "physical AI"]', c: 't-str' }, { t: ',', c: 't-op' }
+  ],
+  [
+    { t: '  rank      ', c: 't-prop' }, { t: ': ', c: 't-op' },
+    { t: '"NAEST State Rank 5 · IIT Kanpur"', c: 't-str' }, { t: ',', c: 't-op' }
+  ],
+  [
+    { t: '  sgpa      ', c: 't-prop' }, { t: ': ', c: 't-op' },
+    { t: '8.73', c: 't-num' }, { t: ',', c: 't-op' },
+    { t: '  // 1st semester', c: 't-cmt' }
+  ],
+  [
+    { t: '}', c: 't-op' }
+  ],
+];
 
-    function init() {
-      resize();
-      stars = Array.from({ length: N }, mkStar);
-    }
+const CHAR_SPEED   = 22;   // ms per character
+const LINE_PAUSE   = 120;  // ms pause between lines
+const START_DELAY  = 600;  // ms before typing begins
 
-    function frame() {
-      ctx.clearRect(0, 0, W, H);
-      for (const s of stars) {
-        s.a += s.da;
-        if (s.a > 1 || s.a < 0) s.da *= -1;
-        s.y += s.vy;
-        if (s.y > H + 4) { s.y = -4; s.x = Math.random() * W; }
+const termBody = document.getElementById('term-body');
 
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${s.hue},60%,90%,${s.a * 0.55})`;
-        ctx.fill();
+// Build cursor element (lives at end of current typing position)
+const cursorEl = document.createElement('span');
+cursorEl.className = 'cursor';
+cursorEl.setAttribute('aria-hidden', 'true');
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function typeTerminal() {
+  await sleep(START_DELAY);
+
+  for (let li = 0; li < LINES.length; li++) {
+    const lineEl = document.createElement('span');
+    lineEl.className = 'term-line';
+    termBody.appendChild(lineEl);
+
+    // move cursor into this line
+    lineEl.appendChild(cursorEl);
+
+    const tokens = LINES[li];
+    for (let ti = 0; ti < tokens.length; ti++) {
+      const tok = tokens[ti];
+      const span = document.createElement('span');
+      if (tok.c) span.className = tok.c;
+
+      // insert span BEFORE cursor
+      lineEl.insertBefore(span, cursorEl);
+
+      for (let ci = 0; ci < tok.t.length; ci++) {
+        span.textContent += tok.t[ci];
+        await sleep(CHAR_SPEED);
       }
-      raf = requestAnimationFrame(frame);
     }
 
-    init();
-    frame();
-    window.addEventListener('resize', () => { resize(); });
-  })();
+    // pause between lines
+    if (li < LINES.length - 1) {
+      await sleep(LINE_PAUSE);
+    }
+  }
+  // cursor stays blinking at end — done!
+}
+
+typeTerminal();
+
+
+/* ══════════════════════════════════════════════════════
+   STARFIELD
+══════════════════════════════════════════════════════ */
+(() => {
+  const canvas = document.getElementById('cosmos');
+  const ctx    = canvas.getContext('2d');
+  let W, H, stars;
+  const N = 180;
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  function mkStar() {
+    return {
+      x: Math.random() * W, y: Math.random() * H,
+      r: Math.random() * 1.1 + 0.15,
+      a: Math.random(), da: (Math.random() - 0.5) * 0.006,
+      vy: Math.random() * 0.18 + 0.04,
+      hue: Math.random() > 0.85 ? 220 : 260
+    };
+  }
+  function frame() {
+    ctx.clearRect(0, 0, W, H);
+    for (const s of stars) {
+      s.a += s.da;
+      if (s.a > 1 || s.a < 0) s.da *= -1;
+      s.y += s.vy;
+      if (s.y > H + 4) { s.y = -4; s.x = Math.random() * W; }
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${s.hue},60%,90%,${s.a * 0.55})`;
+      ctx.fill();
+    }
+    requestAnimationFrame(frame);
+  }
+  resize();
+  stars = Array.from({ length: N }, mkStar);
+  frame();
+  window.addEventListener('resize', resize);
+})();
 </script>
 
 </body>
 </html>
+HTMLEOF
+echo "Done"
